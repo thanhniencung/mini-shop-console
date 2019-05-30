@@ -149,8 +149,14 @@ class _LoginStateWidget extends State<LoginWidget> {
       loadDialog.show();
       model.login().then((result) {
         loadDialog.hide();
+        print("navigation");
+        Navigator.pushNamed(context, '/home');
       })
-      .catchError((e) => {loadDialog.hide()});
+      .catchError((e) {
+        print("loi ne");
+        print(e);
+        loadDialog.hide();
+      });
     }
   }
 }

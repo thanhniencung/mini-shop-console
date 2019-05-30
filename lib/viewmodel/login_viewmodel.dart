@@ -69,7 +69,7 @@ class LoginViewModel extends ChangeNotifier {
 
   Future<Response> login() async {
     if (!_hasErrorPassValidation && !_hasErrorPhoneValidation) {
-      var completer = new Completer();
+      var completer = new Completer<Response>();
       try {
         Response response = await ChapiAPI.get().get(LOGIN);
         completer.complete(response);

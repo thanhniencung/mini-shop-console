@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mini_shop_console/view/login_view.dart';
+import 'package:mini_shop_console/view/splash_view.dart';
 import 'package:mini_shop_console/router.dart';
 import 'package:mini_shop_console/shared/app_color.dart';
 
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
               )
           )
       ),
-      home: LoginView(),
+      home: SplashView(),
       initialRoute: '/',
       onGenerateRoute: Router.generateRoute,
     );

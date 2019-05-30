@@ -1,31 +1,159 @@
 import 'package:flutter/material.dart';
 import 'package:mini_shop_console/viewmodel/login_viewmodel.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 
-class LoginView extends StatelessWidget {
+class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+        appBar: AppBar(
+          title: Text("Bảng tin"),
+          iconTheme: new IconThemeData(color: Colors.white),
+        ),
         body: ChangeNotifierProvider<LoginViewModel>(
           builder: (_) => LoginViewModel(),
-          child: LoginWidget(),
+          child: DashboardWidget(),
         )
     );
   }
 }
 
-class LoginWidget extends StatefulWidget {
+class DashboardWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _LoginStateWidget();
+    return _DashboardStateWidget();
   }
 }
 
-class _LoginStateWidget extends State<LoginWidget> {
+class _DashboardStateWidget extends State<DashboardWidget> {
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return null;
+    return SingleChildScrollView(
+      child: Container(
+        margin: EdgeInsets.all(20.0),
+        child: Column(
+          children: <Widget>[
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text("Thống kê theo ngày",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.blue
+                  )),
+            ),
+            SizedBox(
+              height: 200.0,
+              child: charts.TimeSeriesChart(
+                  _createSampleData(),
+                  animate: false,
+              ),
+            ),
+            SizedBox(
+              height: 15.0,
+            ),
+            buildCard("Tổng thu"),
+            SizedBox(
+              height: 15.0,
+            ),
+            buildCard("Tổng chi"),
+            SizedBox(
+              height: 15.0,
+            ),
+            buildCard("Tồn kho")
+          ],
+        ),
+      ),
+    );
   }
+
+  Widget buildCard(String title) {
+    return Card(
+      color: Color(0xfff6f6f6),
+      elevation: 2.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4.0),
+      ),
+      child: Container(
+        padding: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 10.0, right: 10.0),
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(title,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.blue
+                      )),
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Text("1/2019",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.orange
+                      )),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            Row(
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("250,000,000 VNĐ", style: TextStyle(
+                      fontSize: 23.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue
+                  )),
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Create one series with sample hard coded data.
+  static List<charts.Series<TimeSeriesSales, DateTime>> _createSampleData() {
+    final data = new List<TimeSeriesSales>();
+
+    for (int i=0; i<30; i++) {
+      data.add(new TimeSeriesSales(new DateTime(2019, 1, i+1), 10 * (i+1)));
+    }
+
+    return [
+      new charts.Series<TimeSeriesSales, DateTime>(
+        id: 'Sales',
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (TimeSeriesSales sales, _) => sales.time,
+        measureFn: (TimeSeriesSales sales, _) => sales.sales,
+        data: data,
+      )
+    ];
+  }
+}
+
+class TimeSeriesSales {
+  final DateTime time;
+  final int sales;
+
+  TimeSeriesSales(this.time, this.sales);
 }
