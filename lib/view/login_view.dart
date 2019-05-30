@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mini_shop_console/viewmodel/login_viewmodel.dart';
 import 'package:mini_shop_console/shared/app_color.dart';
 import 'package:provider/provider.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class LoginView extends StatelessWidget {
   @override
@@ -25,11 +26,17 @@ class LoginWidget extends StatefulWidget {
 }
 
 class _LoginStateWidget extends State<LoginWidget> {
+  var formKey = GlobalKey<FormState>();
+  ProgressDialog loadDialog;
+  LoginViewModel model;
+
   @override
   Widget build(BuildContext context) {
 
-    final model = LoginViewModel.of(context);
-    final formKey = GlobalKey<FormState>();
+    loadDialog = new ProgressDialog(context,ProgressDialogType.Normal);
+    loadDialog.setMessage('Đang tải...');
+
+    model = LoginViewModel.of(context);
 
     return Center(
       child: SingleChildScrollView(
@@ -108,8 +115,7 @@ class _LoginStateWidget extends State<LoginWidget> {
                         ),
                         RaisedButton(
                           onPressed: () {
-                            formKey.currentState.validate();
-                            model.login();
+                            submitForm();
                           },
                           color: Colors.orange[600],
                           shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(7.0)),
@@ -135,5 +141,16 @@ class _LoginStateWidget extends State<LoginWidget> {
         ),
       ),
     );
+  }
+
+  void submitForm() {
+    var valid = formKey.currentState.validate();
+    if (valid) {
+      loadDialog.show();
+      model.login().then((result) {
+        loadDialog.hide();
+      })
+      .catchError((e) => {loadDialog.hide()});
+    }
   }
 }

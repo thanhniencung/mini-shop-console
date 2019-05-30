@@ -1,5 +1,9 @@
+import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:mini_shop_console/network/chapi_api.dart';
+import 'package:mini_shop_console/network/endpoint.dart';
+import 'package:dio/dio.dart';
 
 class LoginViewModel extends ChangeNotifier {
   String _phone;
@@ -63,13 +67,18 @@ class LoginViewModel extends ChangeNotifier {
     return null;
   }
 
-  void login() {
+  Future<Response> login() async {
     if (!_hasErrorPassValidation && !_hasErrorPhoneValidation) {
-      print(_phone);
-      print(_password);
-    } else {
-      print("co loi");
+      var completer = new Completer();
+      try {
+        Response response = await ChapiAPI.get().get(LOGIN);
+        completer.complete(response);
+      } catch (e) {
+        completer.completeError(e);
+      }
+      return completer.future;
     }
+    return null;
   }
 
 }
