@@ -35,6 +35,7 @@ class _DashboardStateWidget extends State<DashboardWidget> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
       child: Container(
         margin: EdgeInsets.all(20.0),
         child: Column(
@@ -67,7 +68,11 @@ class _DashboardStateWidget extends State<DashboardWidget> {
             SizedBox(
               height: 15.0,
             ),
-            buildCard("Tồn kho")
+            buildCard("Tồn kho"),
+            SizedBox(
+              height: 15.0,
+            ),
+            buildCard("Khách nợ")
           ],
         ),
       ),
@@ -131,13 +136,13 @@ class _DashboardStateWidget extends State<DashboardWidget> {
     );
   }
 
-  /// Create one series with sample hard coded data.
   static List<charts.Series<TimeSeriesSales, DateTime>> _createSampleData() {
-    final data = new List<TimeSeriesSales>();
-
-    for (int i=0; i<30; i++) {
-      data.add(new TimeSeriesSales(new DateTime(2019, 1, i+1), 10 * (i+1)));
-    }
+    final data = [
+      new TimeSeriesSales(new DateTime(2017, 1, 19), 5),
+      new TimeSeriesSales(new DateTime(2017, 2, 26), 25),
+      new TimeSeriesSales(new DateTime(2017, 3, 3), 50),
+      new TimeSeriesSales(new DateTime(2017, 4, 10), 100),
+    ];
 
     return [
       new charts.Series<TimeSeriesSales, DateTime>(

@@ -35,7 +35,7 @@ class _SplashStateWidget extends State<SplashWidget> {
   }
 
   void navigationPage() {
-    Navigator.of(context).pushReplacementNamed('/login');
+    Navigator.of(context).pushReplacementNamed('/home');
   }
 
   @override

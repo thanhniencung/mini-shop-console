@@ -32,7 +32,7 @@ class _LoginStateWidget extends State<LoginWidget> {
 
   @override
   Widget build(BuildContext context) {
-
+    print("rebuild");
     loadDialog = new ProgressDialog(context,ProgressDialogType.Normal);
     loadDialog.setMessage('Đang tải...');
 
