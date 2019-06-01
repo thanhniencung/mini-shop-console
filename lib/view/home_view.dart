@@ -86,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         foregroundColor: primary,
         onPressed: () { },
         tooltip: 'Increment',
-        child: new Icon(Icons.calendar_today),
+        child: new Icon(Icons.add),
         elevation: 2.0,
       ),
     );

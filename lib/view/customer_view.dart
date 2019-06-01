@@ -8,6 +8,17 @@ class CustomerView extends StatelessWidget {
     return new Scaffold(
         appBar: AppBar(
           title: Text("Khách hàng"),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search),
+              padding: EdgeInsets.all(4.0),
+              iconSize: 32.0,
+              color: Colors.white,
+              onPressed: () {
+
+              },
+            ),
+          ],
         ),
         body: ChangeNotifierProvider<LoginViewModel>(
           builder: (_) => LoginViewModel(),
