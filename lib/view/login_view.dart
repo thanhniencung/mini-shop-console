@@ -151,7 +151,7 @@ class _LoginStateWidget extends State<LoginWidget> {
           loadDialog.hide();
 
           print(result.data);
-          Navigator.pushNamed(context, '/home');
+          Navigator.pushReplacementNamed(context, '/home');
         }).catchError((e) {
           print(e);
           loadDialog.hide();

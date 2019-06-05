@@ -16,9 +16,9 @@ class ChapiAPI {
     dio.interceptors.add(InterceptorsWrapper(
         onRequest:(Options options) async{
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          String token = prefs.get("user");
+          String token = prefs.get("token");
           if (token != null) {
-            options.headers["token"] = token;
+            options.headers["Authorization"] = "Bearer " + token;
           }
           return options;
         }
