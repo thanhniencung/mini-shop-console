@@ -11,9 +11,7 @@ class Cate {
 
   static List<Data> parseData(json) {
     var list = json['data'] as List;
-    List<Data> results =
-    list.map((data) => Data.fromJson(data)).toList();
-    return results;
+    return list.map((data) => Data.fromJson(data)).toList();
   }
 
 }

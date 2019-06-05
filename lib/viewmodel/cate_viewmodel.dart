@@ -16,13 +16,11 @@ class CateViewModel extends ChangeNotifier {
 
   Future<List<Data>> loadCates() async {
     try {
-      print("000");
       Response response = await ChapiAPI.get().get(Endpoint.GET_CATES);
-      print(response.data);
       Cate cate = Cate.fromJson(response.data);
       return cate.data;
     } catch(e) {
-      print("loi ne : ${e}");
+      print(e);
     }
   }
 }
