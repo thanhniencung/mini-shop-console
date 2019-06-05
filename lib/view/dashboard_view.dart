@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:mini_shop_console/viewmodel/login_viewmodel.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
-
+import 'package:mini_shop_console/viewmodel/login_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 class DashboardView extends StatelessWidget {

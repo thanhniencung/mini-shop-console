@@ -1,9 +1,12 @@
 import 'dart:async';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
 import 'package:mini_shop_console/network/chapi_api.dart';
 import 'package:mini_shop_console/network/endpoint.dart';
-import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mini_shop_console/model/user.dart';
+import 'package:provider/provider.dart';
 
 class LoginViewModel extends ChangeNotifier {
   String _phone;
@@ -67,12 +70,25 @@ class LoginViewModel extends ChangeNotifier {
     return null;
   }
 
-  Future<Response> login() async {
+  Future<User> login() async {
     if (!_hasErrorPassValidation && !_hasErrorPhoneValidation) {
-      var completer = new Completer<Response>();
+      var completer = new Completer<User>();
       try {
-        Response response = await ChapiAPI.get().get(LOGIN);
-        completer.complete(response);
+        Response response = await ChapiAPI.get().post(
+              Endpoint.LOGIN,
+              data: {
+                "phone": _phone,
+                "password": _password,
+              }
+        );
+
+        User user = new User.fromJson(response.data);
+        // cache user info
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString("user", user.data.toJSON().toString());
+        prefs.setString("token", user.data.token);
+
+        completer.complete(user);
       } catch (e) {
         completer.completeError(e);
       }

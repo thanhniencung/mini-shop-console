@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mini_shop_console/view/splash_view.dart';
 import 'package:mini_shop_console/router.dart';
 import 'package:mini_shop_console/shared/app_color.dart';
+import 'package:mini_shop_console/view/splash_view.dart';
 
 void main() => runApp(MyApp());
 

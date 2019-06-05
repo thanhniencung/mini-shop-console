@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mini_shop_console/viewmodel/login_viewmodel.dart';
 import 'package:mini_shop_console/shared/app_color.dart';
-import 'package:provider/provider.dart';
+import 'package:mini_shop_console/viewmodel/login_viewmodel.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 
 class LoginView extends StatelessWidget {
   @override
@@ -27,14 +27,10 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginStateWidget extends State<LoginWidget> {
   var formKey = GlobalKey<FormState>();
-  ProgressDialog loadDialog;
   LoginViewModel model;
 
   @override
   Widget build(BuildContext context) {
-    print("rebuild");
-    loadDialog = new ProgressDialog(context,ProgressDialogType.Normal);
-    loadDialog.setMessage('Đang tải...');
 
     model = LoginViewModel.of(context);
 
@@ -115,7 +111,7 @@ class _LoginStateWidget extends State<LoginWidget> {
                         ),
                         RaisedButton(
                           onPressed: () {
-                            submitForm();
+                            submitForm(context);
                           },
                           color: Colors.orange[600],
                           shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(7.0)),
@@ -143,19 +139,23 @@ class _LoginStateWidget extends State<LoginWidget> {
     );
   }
 
-  void submitForm() {
+  void submitForm(BuildContext context) {
     var valid = formKey.currentState.validate();
     if (valid) {
+      var loadDialog = new ProgressDialog(context,ProgressDialogType.Normal);
+      loadDialog.setMessage('Đang tải...');
       loadDialog.show();
-      model.login().then((result) {
-        loadDialog.hide();
-        print("navigation");
-        Navigator.pushNamed(context, '/home');
-      })
-      .catchError((e) {
-        print("loi ne");
-        print(e);
-        loadDialog.hide();
+
+      Future.delayed(const Duration(seconds: 3), () {
+        model.login().then((result) {
+          loadDialog.hide();
+
+          print(result.data);
+          Navigator.pushNamed(context, '/home');
+        }).catchError((e) {
+          print(e);
+          loadDialog.hide();
+        });
       });
     }
   }

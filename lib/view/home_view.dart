@@ -1,16 +1,15 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mini_shop_console/shared/app_color.dart';
+import 'package:mini_shop_console/view/customer_view.dart';
 import 'package:mini_shop_console/view/dashboard_view.dart';
 import 'package:mini_shop_console/view/order_view.dart';
 import 'package:mini_shop_console/view/product_view.dart';
-import 'package:mini_shop_console/view/customer_view.dart';
-
-import 'package:mini_shop_console/view/widget/fab_with_icons.dart';
 import 'package:mini_shop_console/view/widget/fab_bottom_app_bar.dart';
+import 'package:mini_shop_console/view/widget/fab_with_icons.dart';
 import 'package:mini_shop_console/view/widget/layout.dart';
 
 // https://github.com/bizz84/bottom_bar_fab_flutter
-
 class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -28,7 +27,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+  static const int ADD_PRODUCT = 0;
+  static const int ADD_ORDER = 1;
+
+  bool overlayButton = true;
   int _currentIndex = 0;
+
   final List<Widget> _children = [
     DashboardView(),
     OrderView(),
@@ -36,15 +40,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     CustomerView()
   ];
 
-  void _selectedTab(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
-  void _selectedFab(int index) {
-
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,31 +59,20 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: _buildFab(context), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: primary,
+        onPressed: () {
+          Navigator.pushNamed(context, '/add_product', arguments: 0);
+        },
+        child: new Icon(Icons.add, color: Colors.white,),
+        elevation: 2.0,
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
-  Widget _buildFab(BuildContext context) {
-    // tạo đơn hàng, nhập kho 1 sản phẩm, tìm kiếm
-    final icons = [ Icons.search, Icons.search, Icons.search ];
-    return AnchoredOverlay(
-      showOverlay: true,
-      overlayBuilder: (context, offset) {
-        return CenterAbout(
-          position: Offset(offset.dx, offset.dy - icons.length * 35.0),
-          child: FabWithIcons(
-            icons: icons,
-            onIconTapped: _selectedFab,
-          ),
-        );
-      },
-      child: FloatingActionButton(
-        foregroundColor: primary,
-        onPressed: () { },
-        tooltip: 'Increment',
-        child: new Icon(Icons.add),
-        elevation: 2.0,
-      ),
-    );
+  void _selectedTab(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:mini_shop_console/viewmodel/login_viewmodel.dart';
-import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashView extends StatelessWidget {
   @override
@@ -34,8 +34,17 @@ class _SplashStateWidget extends State<SplashWidget> {
     return new Timer(_duration, navigationPage);
   }
 
-  void navigationPage() {
-    Navigator.of(context).pushReplacementNamed('/home');
+  void navigationPage() async {
+    // check logic
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String user = prefs.get("user");
+    print(user);
+    print(">>>>>>>>>>");
+    if (user == null) {
+      Navigator.of(context).pushReplacementNamed('/login');
+    } else {
+      Navigator.of(context).pushReplacementNamed('/home');
+    }
   }
 
   @override

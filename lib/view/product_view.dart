@@ -8,7 +8,19 @@ class ProductView extends StatelessWidget {
     return new Scaffold(
         appBar: AppBar(
           title: Text("Sản phẩm"),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search),
+              padding: EdgeInsets.all(4.0),
+              iconSize: 32.0,
+              color: Colors.white,
+              onPressed: () {
+
+              },
+            ),
+          ],
         ),
+
         body: ChangeNotifierProvider<LoginViewModel>(
           builder: (_) => LoginViewModel(),
           child: ProductWidget(),
