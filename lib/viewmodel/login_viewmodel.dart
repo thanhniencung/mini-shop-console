@@ -89,10 +89,11 @@ class LoginViewModel extends ChangeNotifier {
         prefs.setString("token", user.data.token);
 
         completer.complete(user);
+        return completer.future;
+
       } catch (e) {
         completer.completeError(e);
       }
-      return completer.future;
     }
     return null;
   }

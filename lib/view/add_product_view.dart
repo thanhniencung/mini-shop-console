@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:mini_shop_console/shared/app_color.dart';
 import 'package:mini_shop_console/viewmodel/product_viewmodel.dart';
 import 'package:mini_shop_console/viewmodel/cate_viewmodel.dart';
 import 'package:mini_shop_console/model/cate.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
 
 class AddProductView extends StatelessWidget {
   @override
@@ -42,6 +45,7 @@ class AddProductWidget extends StatefulWidget {
 }
 
 class _AddProductStateWidget extends State<AddProductWidget> {
+  String _imageUrl;
 
   @override
   void initState() {
@@ -51,6 +55,7 @@ class _AddProductStateWidget extends State<AddProductWidget> {
   @override
   Widget build(BuildContext context) {
     var cateViewModel = CateViewModel.of(context);
+    var productViewModel = ProductViewModel.of(context);
 
     return SingleChildScrollView(
       child: Container(
@@ -121,6 +126,7 @@ class _AddProductStateWidget extends State<AddProductWidget> {
                     SizedBox(height: 20,),
                     RaisedButton(
                       onPressed: () {
+                        uploadImage(productViewModel);
                       },
                       color: Colors.white,
                       shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(7.0)),
@@ -141,12 +147,10 @@ class _AddProductStateWidget extends State<AddProductWidget> {
               ],
             ),
 
-            /*SizedBox(height: 20,),
-
-            Image.network(
-              'http://daitangkinhvietnam.org/sites/default/files/get_image/images1004264_1.jpg',
-            ),*/
-
+            SizedBox(height: 20,),
+            _imageUrl == null ? Container() : Image.network(
+              _imageUrl
+            ),
             SizedBox(height: 40,),
 
             Row(
@@ -154,6 +158,7 @@ class _AddProductStateWidget extends State<AddProductWidget> {
               children: <Widget>[
                 RaisedButton(
                   onPressed: () {
+
                   },
                   color: primary,
                   shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(7.0)),
@@ -171,12 +176,28 @@ class _AddProductStateWidget extends State<AddProductWidget> {
                 ),
               ],
             ),
-
-            SizedBox(height: 40,),
-
           ],
         )
       ),
+    );
+  }
+
+  Future uploadImage(ProductViewModel model) async {
+    var file =  await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    int MAX_WIDTH = 500;
+    ImageProperties properties = await FlutterNativeImage.getImageProperties(file.path);
+    File compressedFile = await FlutterNativeImage.compressImage(file.path, quality: 80,
+        targetWidth: MAX_WIDTH,
+        targetHeight: (properties.height * MAX_WIDTH / properties.width).round());
+
+    model.uploadImage(compressedFile)
+        .then((result) {
+          print(result);
+          setState(() {
+            _imageUrl = result.toString();
+          });
+        }
     );
   }
 
