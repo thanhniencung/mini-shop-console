@@ -68,7 +68,6 @@ class _LoginStateWidget extends State<LoginWidget> {
                         TextFormField(
                           initialValue: model.phone,
                           validator: (value) {
-                            print("validate phone");
                             return model.validatePhone(value);
                           },
                           style: TextStyle(fontSize: 20),
@@ -90,7 +89,6 @@ class _LoginStateWidget extends State<LoginWidget> {
                         TextFormField(
                           initialValue: model.password,
                           validator: (value) {
-                            print("validate pass");
                             return model.validatePass(value);
                           },
                           obscureText: true,

@@ -37,10 +37,7 @@ class _SplashStateWidget extends State<SplashWidget> {
   void navigationPage() async {
     // check logic
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String user = prefs.get("user");
-    print(user);
-    print(">>>>>>>>>>");
-    if (user == null) {
+    if (prefs.get("user") == null) {
       Navigator.of(context).pushReplacementNamed('/login');
     } else {
       Navigator.of(context).pushReplacementNamed('/home');

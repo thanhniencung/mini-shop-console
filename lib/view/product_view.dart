@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mini_shop_console/viewmodel/login_viewmodel.dart';
 import 'package:provider/provider.dart';
+import 'package:mini_shop_console/viewmodel/product_viewmodel.dart';
 
 class ProductView extends StatelessWidget {
   @override
@@ -21,8 +22,8 @@ class ProductView extends StatelessWidget {
           ],
         ),
 
-        body: ChangeNotifierProvider<LoginViewModel>(
-          builder: (_) => LoginViewModel(),
+        body: ChangeNotifierProvider<ProductViewModel>(
+          builder: (_) => ProductViewModel(),
           child: ProductWidget(),
         )
     );
@@ -37,8 +38,12 @@ class ProductWidget extends StatefulWidget {
 }
 
 class _ProductStateWidget extends State<ProductWidget> {
+  ProductViewModel productViewModel;
+
   @override
   Widget build(BuildContext context) {
+    productViewModel = ProductViewModel.of(context);
+
     return ListView.builder(
       physics: BouncingScrollPhysics(),
       itemBuilder: (context, position) {

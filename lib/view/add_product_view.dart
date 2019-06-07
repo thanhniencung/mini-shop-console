@@ -3,11 +3,15 @@ import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:mini_shop_console/shared/app_color.dart';
+import 'package:mini_shop_console/shared/ui_utils.dart';
 import 'package:mini_shop_console/viewmodel/product_viewmodel.dart';
 import 'package:mini_shop_console/viewmodel/cate_viewmodel.dart';
 import 'package:mini_shop_console/model/cate.dart';
+import 'package:mini_shop_console/model/product.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:mini_shop_console/model/error.dart';
 
 class AddProductView extends StatelessWidget {
   @override
@@ -45,7 +49,10 @@ class AddProductWidget extends StatefulWidget {
 }
 
 class _AddProductStateWidget extends State<AddProductWidget> {
-  String _imageUrl;
+
+  ProductViewModel productViewModel;
+  CateViewModel cateViewModel;
+  var formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -54,136 +61,173 @@ class _AddProductStateWidget extends State<AddProductWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var cateViewModel = CateViewModel.of(context);
-    var productViewModel = ProductViewModel.of(context);
+    cateViewModel = CateViewModel.of(context);
+    productViewModel = ProductViewModel.of(context);
 
     return SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.only(top: 30.0, left: 20.0, right: 20.0, bottom: 30.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 60,
-              child: TextFormField(
-                keyboardType: TextInputType.text,
-                decoration: new InputDecoration(
-                  labelText: "Tên sản phẩm",
-                  fillColor: Colors.white,
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(7.0),
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 60,
+                child: TextFormField(
+                  validator: (value) {
+                    return productViewModel.validateProductName(value);
+                  },
+                  keyboardType: TextInputType.text,
+                  decoration: new InputDecoration(
+                    labelText: "Tên sản phẩm",
+                    fillColor: Colors.white,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(7.0),
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 40,),
-            Text("Danh mục", style: TextStyle(fontSize: 17.0, color: primary, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10,),
-            FutureBuilder(
-                future: cateViewModel.loadCates(),
-                builder: (context, snapshot) {
-                  return _buildCategories(context, snapshot);
-                }
-            ),
-            SizedBox(height: 40,),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 60,
-              child: TextFormField(
-                keyboardType: TextInputType.number,
-                decoration: new InputDecoration(
-                  labelText: "Nhập giá ",
-                  fillColor: Colors.white,
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(7.0),
+              SizedBox(height: 40,),
+              Text("Danh mục", style: TextStyle(fontSize: 17.0, color: primary, fontWeight: FontWeight.bold)),
+              SizedBox(height: 10,),
+              FutureBuilder(
+                  future: cateViewModel.loadCates(),
+                  builder: (context, snapshot) {
+                    return _buildCategories(context, snapshot);
+                  }
+              ),
+              SizedBox(height: 40,),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 60,
+                child: TextFormField(
+                  validator: (value) {
+                    return productViewModel.validatePrice(value);
+                  },
+                  keyboardType: TextInputType.number,
+                  decoration: new InputDecoration(
+                    labelText: "Nhập giá ",
+                    fillColor: Colors.white,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(7.0),
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 40,),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 60,
-              child: TextFormField(
-                keyboardType: TextInputType.number,
-                decoration: new InputDecoration(
-                  labelText: "Số Lượng",
-                  fillColor: Colors.white,
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(7.0),
+              SizedBox(height: 40,),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 60,
+                child: TextFormField(
+                  validator: (value) {
+                    return productViewModel.validateQuantity(value);
+                  },
+                  keyboardType: TextInputType.number,
+                  decoration: new InputDecoration(
+                    labelText: "Số Lượng",
+                    fillColor: Colors.white,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(7.0),
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 40,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Text("Thêm hình ảnh sản phẩm", style: TextStyle(fontSize: 17.0,color: primary, fontWeight: FontWeight.bold)),
-                    SizedBox(height: 20,),
-                    RaisedButton(
-                      onPressed: () {
-                        uploadImage(productViewModel);
-                      },
-                      color: Colors.white,
-                      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(7.0)),
-                      child: SizedBox(
-                        width: 90,
-                        height: 90,
-                        child: Center(
-                          child: Icon(
-                            Icons.add,
-                            color: primary,
-                            size: 30.0,
+              SizedBox(height: 40,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      Text("Thêm hình ảnh sản phẩm", style: TextStyle(fontSize: 17.0,color: primary, fontWeight: FontWeight.bold)),
+                      SizedBox(height: 20,),
+                      RaisedButton(
+                        onPressed: () {
+                          uploadImage(productViewModel);
+                        },
+                        color: Colors.white,
+                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(7.0)),
+                        child: SizedBox(
+                          width: 90,
+                          height: 90,
+                          child: Center(
+                            child: Icon(
+                              Icons.add,
+                              color: primary,
+                              size: 30.0,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                    ],
+                  ),
+                ],
+              ),
 
-            SizedBox(height: 20,),
-            _imageUrl == null ? Container() : Image.network(
-              _imageUrl
-            ),
-            SizedBox(height: 40,),
+              SizedBox(height: 20,),
+              productViewModel.image == null ? Container() : Image.network(
+                  productViewModel.image
+              ),
+              SizedBox(height: 40,),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                RaisedButton(
-                  onPressed: () {
-
-                  },
-                  color: primary,
-                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(7.0)),
-                  child: SizedBox(
-                    width: 250,
-                    height: 50,
-                    child: Center(
-                      child: Text(
-                        "Thêm sản phẩm",
-                        style: TextStyle(fontSize: 17, color: Colors.white),
-                        textAlign: TextAlign.center,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  RaisedButton(
+                    onPressed: () {
+                        submitForm(context);
+                    },
+                    color: primary,
+                    shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(7.0)),
+                    child: SizedBox(
+                      width: 250,
+                      height: 50,
+                      child: Center(
+                        child: Text(
+                          "Thêm sản phẩm",
+                          style: TextStyle(fontSize: 17, color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         )
       ),
     );
   }
 
+  void submitForm(BuildContext context) {
+    var valid = formKey.currentState.validate();
+    if (valid) {
+      var loadDialog = new ProgressDialog(context,ProgressDialogType.Normal);
+      loadDialog.setMessage('Đang tải...');
+      loadDialog.show();
+
+      Future.delayed(const Duration(seconds: 2), () {
+        loadDialog.hide();
+
+        productViewModel.addProduct().then((product) {
+          UIUtils.toastSuccessMessage(context, "Thêm sản phẩm thành công");
+        })
+        .catchError((e) {
+          if (e is Error) {
+            UIUtils.toastErrorMessage(context, e.message);
+          }
+        });
+      });
+    }
+  }
+
   Future uploadImage(ProductViewModel model) async {
     var file =  await ImagePicker.pickImage(source: ImageSource.gallery);
+    if (file == null) {
+      return null;
+    }
 
     int MAX_WIDTH = 500;
     ImageProperties properties = await FlutterNativeImage.getImageProperties(file.path);
@@ -194,9 +238,7 @@ class _AddProductStateWidget extends State<AddProductWidget> {
     model.uploadImage(compressedFile)
         .then((result) {
           print(result);
-          setState(() {
-            _imageUrl = result.toString();
-          });
+          productViewModel.image = result.toString();
         }
     );
   }
@@ -216,7 +258,11 @@ class _AddProductStateWidget extends State<AddProductWidget> {
 
         for (int i=0; i < snapshot.data.length; i++) {
 
-          Data data = snapshot.data[i];
+          CateData data = snapshot.data[i];
+
+          if (i == 0 && productViewModel.cateId == null) {
+            productViewModel.cateId = data.cateId;
+          }
 
           cates.addAll({
             "${data.cateId}" : data.cateName
@@ -231,11 +277,11 @@ class _AddProductStateWidget extends State<AddProductWidget> {
         return DropdownButton(
           iconEnabledColor: primary,
           isExpanded: true,
-          value: "1a5b851c-86ef-11e9-8cad-8c8590cefb77",
+          value: productViewModel.cateId,
           items: options,
-          onChanged: (newItem) => {
-
-          },
+          onChanged: (newCateId) {
+            productViewModel.onDropdownChange(newCateId);
+          }
         );
     }
   }

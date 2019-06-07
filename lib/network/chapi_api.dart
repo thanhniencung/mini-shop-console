@@ -13,6 +13,7 @@ class ChapiAPI {
     );
 
     Dio dio = new Dio(options);
+    dio.interceptors.add(LogInterceptor(responseBody: true));
     dio.interceptors.add(InterceptorsWrapper(
         onRequest:(Options options) async{
           SharedPreferences prefs = await SharedPreferences.getInstance();

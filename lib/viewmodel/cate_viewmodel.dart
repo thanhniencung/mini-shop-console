@@ -14,7 +14,7 @@ class CateViewModel extends ChangeNotifier {
     return Provider.of<CateViewModel>(context);
   }
 
-  Future<List<Data>> loadCates() async {
+  Future<List<CateData>> loadCates() async {
     try {
       Response response = await ChapiAPI.get().get(Endpoint.GET_CATES);
       Cate cate = Cate.fromJson(response.data);
@@ -22,5 +22,6 @@ class CateViewModel extends ChangeNotifier {
     } catch(e) {
       print(e);
     }
+    return null;
   }
 }

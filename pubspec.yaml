@@ -26,6 +26,7 @@ dependencies:
     git: https://github.com/btastic/flutter_native_image.git
   cupertino_icons: ^0.1.2
   shared_preferences: ^0.5.3+1
+  fluttertoast: ^3.1.0
   provider: ^2.0.1
   progress_dialog: ^1.1.0+1
   dio: 2.1.6

@@ -1,5 +1,5 @@
 class Cate {
-  List<Data> data;
+  List<CateData> data;
 
   Cate({this.data});
 
@@ -9,21 +9,21 @@ class Cate {
     );
   }
 
-  static List<Data> parseData(json) {
+  static List<CateData> parseData(json) {
     var list = json['data'] as List;
-    return list.map((data) => Data.fromJson(data)).toList();
+    return list.map((data) => CateData.fromJson(data)).toList();
   }
 
 }
 
-class Data {
+class CateData {
   String cateId;
   String cateName;
 
-  Data({this.cateId, this.cateName});
+  CateData({this.cateId, this.cateName});
 
-  factory Data.fromJson(Map<String, dynamic> json) {
-    return Data(
+  factory CateData.fromJson(Map<String, dynamic> json) {
+    return CateData(
       cateId: json['cateId'],
       cateName: json['cateName'],
     );
