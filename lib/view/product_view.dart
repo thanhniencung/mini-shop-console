@@ -71,63 +71,59 @@ class _ProductStateWidget extends State<ProductWidget> {
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Image.network(
-                        data[position].productImage,
-                        width: 50.0,
-                        height: 50.0,
-                        fit: BoxFit.cover,
-                      ),
-                      SizedBox(width: 12.0),
-                      Flexible(
-                        child: Row(
+                      Container(
+                        margin: EdgeInsets.only(right: 15.0),
+                        child: Column(
                           children: <Widget>[
-                            Flexible(
-                              flex: 3,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    data[position].productName,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    style: TextStyle(
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black87),
-                                  ),
-                                  SizedBox(height: 5.0,),
-                                  Text("SL: ${data[position].quantity} x ${data[position].price}", style: TextStyle(
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.blue),
-                                  ),
-                                  SizedBox(height: 2.0,),
-                                  Text("Đã bán: ${data[position].soldItems} x ${data[position].price}", style: TextStyle(
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.blue),
-                                  ),
-                                ],
-                              ),
+                          Image.network(
+                            data[position].productImage,
+                              width: 50.0,
+                              height: 50.0,
+                              fit: BoxFit.cover,
                             ),
-                            SizedBox(width: 10.0,),
-                            Flexible(
-                              flex: 1,
-                              child: Column(
-                                children: <Widget>[
-                                  Text("Hết hàng", style: TextStyle(
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.red),
-                                  ),
-                                ],
-                              ),
-                            )
                           ],
                         ),
                       ),
+
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              data[position].productName,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black87),
+                            ),
+                            SizedBox(height: 5.0,),
+                            Text("SL: ${data[position].quantity} x ${data[position].price}", style: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.blue),
+                            ),
+                            SizedBox(height: 2.0,),
+                            Text("Đã bán: ${data[position].soldItems} x ${data[position].price}", style: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.blue),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Column(
+                        children: <Widget>[
+                          Text("Hết hàng", style: TextStyle(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.red),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),
