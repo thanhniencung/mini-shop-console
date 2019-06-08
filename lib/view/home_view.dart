@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mini_shop_console/shared/app_color.dart';
-import 'package:mini_shop_console/view/customer_view.dart';
+import 'package:mini_shop_console/view/user_view.dart';
 import 'package:mini_shop_console/view/dashboard_view.dart';
 import 'package:mini_shop_console/view/order_view.dart';
 import 'package:mini_shop_console/view/product_view.dart';
@@ -37,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     DashboardView(),
     OrderView(),
     ProductView(),
-    CustomerView()
+    UserView()
   ];
 
 

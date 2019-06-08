@@ -12,16 +12,31 @@ class Product {
     this.cateId, this.soldItems, this.quantity, this.price});
 
   factory Product.fromJson(Map<String, dynamic> json) {
-    var data = json['data'];
     return Product(
-        productName: data['productName'],
-        productImage: data['productImage'],
-        updateAt: data['updateAt'],
-        cateId: data['cateId'],
-        soldItems: data['soldItems'],
-        quantity: data['quantity'],
-        price: double.tryParse((data['price']).toString()) ?? 0
+        productName: json['productName'],
+        productImage: json['productImage'],
+        updateAt: json['updateAt'],
+        cateId: json['cateId'],
+        soldItems: json['soldItems'],
+        quantity: json['quantity'],
+        price: double.tryParse((json['price']).toString()) ?? 0
+    );
+  }
+}
+
+class ListProduct {
+  List<Product> data;
+
+  ListProduct({this.data});
+
+  factory ListProduct.fromJson(Map<String, dynamic> json) {
+    return ListProduct(
+        data: parseData(json)
     );
   }
 
+  static List<Product> parseData(json) {
+    var list = json['data'] as List;
+    return list.map((data) => Product.fromJson(data)).toList();
+  }
 }

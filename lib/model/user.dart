@@ -1,29 +1,45 @@
-class User  {
-  int code;
-  String message;
-  Data data;
+class ListUser {
+  List<UserData> data;
 
-  User({this.code, this.message, this.data});
+  ListUser({this.data});
+
+  factory ListUser.fromJson(Map<String, dynamic> json) {
+    return ListUser(
+      data: parseData(json),
+    );
+  }
+
+  static List<UserData> parseData(json) {
+    if (json['data'] == null) {
+      return null;
+    }
+    var list = json['data'] as List;
+    return list.map((data) => UserData.fromJson(data)).toList();
+  }
+}
+
+class User  {
+  UserData data;
+
+  User({this.data});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      code: json['code'],
-      message: json['message'],
-      data: Data.fromJson(json['data']),
+      data: UserData.fromJson(json['data']),
     );
   }
 }
 
-class Data {
+class UserData {
   String displayName;
   String avatar;
   String phone;
   String token;
 
-  Data({this.displayName, this.avatar, this.phone, this.token});
+  UserData({this.displayName, this.avatar, this.phone, this.token});
 
-  factory Data.fromJson(Map<String, dynamic> json) {
-    return Data(
+  factory UserData.fromJson(Map<String, dynamic> json) {
+    return UserData(
         phone: json['phone'],
         avatar: json['avatar'],
         displayName: json['displayName'],

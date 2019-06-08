@@ -8,7 +8,6 @@ import 'package:mini_shop_console/network/endpoint.dart';
 import 'package:mini_shop_console/model/upload_image.dart';
 import 'package:mini_shop_console/model/product.dart';
 import 'package:mini_shop_console/model/error.dart';
-import 'package:mini_shop_console/model/list_product.dart';
 import 'package:provider/provider.dart';
 
 class ProductViewModel extends ChangeNotifier {
@@ -75,7 +74,7 @@ class ProductViewModel extends ChangeNotifier {
       } else {
         completer.completeError(e);
       }
-    }
+    } catch(e) { print(e); }
 
     return completer.future;
   }
